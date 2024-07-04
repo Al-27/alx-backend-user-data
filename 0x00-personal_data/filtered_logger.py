@@ -6,7 +6,7 @@ import logging
 import re
 
 
-def filter_datum(fields, redaction, message: list, separator):
+def filter_datum(fields: list, redaction: str, message: list, separator: str) -> list:
     new_mess = message.copy()
     for i in range(len(new_mess)):
         for f in fields:
