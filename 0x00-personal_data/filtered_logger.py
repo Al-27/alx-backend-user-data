@@ -12,3 +12,19 @@ def filter_datum(fields: typing.List[str], redaction: str, message: str, separat
     for f in fields:
         message = re.sub(f"(?<={f}=)[^{separator}]+",redaction, message)
     return message
+    
+    
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+        """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: typing.List[str]):
+        self.fields = fields.copy()
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+
+    def format(self, record: logging.LogRecord) -> str:
+        return filter_datum(self.fields,self.REDACTION,record.message, self.SEPARATOR)
