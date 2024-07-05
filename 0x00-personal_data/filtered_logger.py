@@ -8,7 +8,7 @@ import re
 
 
 def filter_datum(fields: typing.List[str], redaction: str, message: str, separator: str) -> str:
-    new_mess = message.copy()
+    """    Mod Doc    """
     for f in fields:
-        new_mess = re.sub(f"(?<={f}=)[^{separator}]+",redaction, new_mess)
-    return new_mess
+        message = re.sub(f"(?<={f}=)[^{separator}]+",redaction, message)
+    return message
