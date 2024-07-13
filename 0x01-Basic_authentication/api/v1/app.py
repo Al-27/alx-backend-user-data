@@ -51,10 +51,10 @@ if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
     auth_type = getenv("AUTH_TYPE")
-    if auth_type :
-        from api.v1.auth import BasicAuth
+    if auth_type != "auth_basic" :
+        from api.v1.auth.basic_auth import BasicAuth
         auth = BasicAuth()
     elif auth_type == "auth":
-        from api.v1.auth import Auth
+        from api.v1.auth.auth import Auth
         auth = Auth()
     app.run(host=host, port=port)
