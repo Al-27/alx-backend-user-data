@@ -20,7 +20,7 @@ def forbidden():
     Return:
       - the forbidden of the API
     """
-    abort(401)
+    abort(403)
 
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
