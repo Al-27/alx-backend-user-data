@@ -17,7 +17,7 @@ class Auth:
         """function
         """
         if path:
-            tmp = path.strip('/')
+            tmp = '/'+path.strip('/')
             if tmp in excluded_paths or f'{tmp}/' in excluded_paths:
                 return False
         return True 
