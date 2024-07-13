@@ -44,3 +44,15 @@ class BasicAuth(Auth):
                 if len(decoded_base64_authorization_header.split(":")) == 2:
                     return tuple(decoded_base64_authorization_header.split(":"))
         return (None,None)
+
+    def user_object_from_credentials(self, user_email: str, user_pwd: str) -> TypeVar('User'): 
+        """func
+        """
+        from models.user import User
+        if user_email and isinstance(user_email, str) and user_pwd and isinstance(user_pwd,str):
+            user = User.search({"email": user_email})
+            if len(user) == 1 :
+                if user[0].is_valid_password(user_pwd):
+                    return user[0]
+        return None
+        
