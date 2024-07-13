@@ -18,7 +18,14 @@ class BasicAuth(Auth):
         """function
         """
         if authorization_header:
-            if type(authorization_header) == type(str):
+            if isinstance(authorization_header, str):
                 if authorization_header[:6] == "Basic ":
                     return authorization_header[6:]
         return None
+    
+    def decode_base64_authorization_header(self, base64_authorization_header: str) -> str: 
+        """function
+        """
+
+        return None
+
