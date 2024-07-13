@@ -26,10 +26,11 @@ class BasicAuth(Auth):
     def decode_base64_authorization_header(self, base64_authorization_header: str) -> str: 
         """function
         """
+        import base64
         try:
             if base64_authorization_header:
                 if isinstance(base64_authorization_header, str):
-                    return base64_authorization_header.decode("utf-8")
+                    return base64.b64decode(base64_authorization_header).decode("utf-8")
         except Exception as e:
             pass
 
