@@ -17,7 +17,7 @@ class Auth:
         """function
         """
         if path:
-            tmp = path.strip('/')
+            tmp = '/'+path.strip('/')
             if tmp in excluded_paths or f'{tmp}/' in excluded_paths:
                 return False
         return True 
@@ -33,4 +33,4 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'): # type: ignore
         """function
         """
-        return None if request is None else request.current_user
+        return None

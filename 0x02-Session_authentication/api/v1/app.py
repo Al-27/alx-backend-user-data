@@ -38,24 +38,24 @@ def not_found(error) -> str:
 def filter_req():
     """Filter Request
     """
-    if app:
+    if app and auth is not None:
         if auth.require_auth(request.path,['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']):
-            
             if auth.authorization_header(request.headers) == None:
                 abort(401)
             if auth.current_user(request) == None:
                 abort(403)
-            request.current_user = auth.current_user(request)
 
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
     auth_type = getenv("AUTH_TYPE")
-    if auth_type :
-        from api.v1.auth import BasicAuth
+    
+    if auth_type == "basic_auth" :
+        from api.v1.auth.basic_auth import BasicAuth
         auth = BasicAuth()
     elif auth_type == "auth":
-        from api.v1.auth import Auth
+        from api.v1.auth.auth import Auth
         auth = Auth()
+    
     app.run(host=host, port=port)
