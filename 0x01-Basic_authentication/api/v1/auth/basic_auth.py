@@ -41,8 +41,9 @@ class BasicAuth(Auth):
         """
         if decoded_base64_authorization_header:
             if isinstance(decoded_base64_authorization_header, str):
-                if len(decoded_base64_authorization_header.split(":")) == 2:
-                    return tuple(decoded_base64_authorization_header.split(":"))
+                split_header = decoded_base64_authorization_header.split(":",1)
+                if len(split_header) == 2:
+                    return tuple(split_header)
         return (None,None)
 
     def user_object_from_credentials(self, user_email: str, user_pwd: str) -> TypeVar('User'): 
@@ -55,4 +56,22 @@ class BasicAuth(Auth):
                 if user[0].is_valid_password(user_pwd):
                     return user[0]
         return None
-        
+    
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """
+        in the class BasicAuth that overloads Auth and retrieves the User instance for a request:
+        """
+        if request:
+            header = self.authorization_header(request.headers)
+            if header:
+                auth_header = self.extract_base64_authorization_header(header)
+                if auth_header:
+                    dec_header = self.decode_base64_authorization_header(auth_header)
+                    if dec_header:
+                        usr_creds = self.extract_user_credentials(dec_header)
+                        if None not in usr_creds:
+                            usr = self.user_object_from_credentials(usr_creds[0], usr_creds[1])
+                            if usr:
+                                return usr
+        return None
