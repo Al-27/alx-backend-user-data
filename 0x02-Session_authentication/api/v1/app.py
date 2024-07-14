@@ -13,6 +13,7 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
+EXCLUDED_PATHS = ["/api/v1/auth_session/login/",'/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
 @app.errorhandler(401)
 def not_authorized(error) -> str:
@@ -39,10 +40,10 @@ def filter_req():
     """Filter Request
     """
     if app and auth is not None:
-        if auth.require_auth(request.path,['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']):
-            if auth.authorization_header(request.headers) == None:
+        if auth.require_auth(request.path,EXCLUDED_PATHS):
+            if auth.authorization_header(request.headers) is None and auth.session_cookie(request) is None:
                 abort(401)
-            if auth.current_user(request) == None:
+            if auth.current_user(request) is None:
                 abort(403)
             request.current_user = auth.current_user(request)
 
@@ -51,7 +52,10 @@ if __name__ == "__main__":
     port = getenv("API_PORT", "5000")
     auth_type = getenv("AUTH_TYPE")
     
-    if auth_type == "basic_auth" :
+    if auth_type == "session_auth":
+        from api.v1.auth.session_auth import SessionAuth
+        auth = SessionAuth()
+    elif auth_type == "basic_auth" :
         from api.v1.auth.basic_auth import BasicAuth
         auth = BasicAuth()
     elif auth_type == "auth":

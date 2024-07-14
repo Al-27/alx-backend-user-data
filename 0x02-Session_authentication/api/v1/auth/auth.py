@@ -34,3 +34,16 @@ class Auth:
         """function
         """
         return None
+
+
+    def session_cookie(self, request=None):
+        """get me some cookies
+        """
+        import os
+        cookie_nm = "_my_session_id"
+        if os.getenv("SESSION_NAME"):
+            cookie_nm = os.getenv("SESSION_NAME")
+        if request and request.cookie:
+            return request.cookie.get(cookie_nm)
+
+        return None
