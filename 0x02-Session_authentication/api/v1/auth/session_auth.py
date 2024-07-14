@@ -17,7 +17,7 @@ class SessionAuth(Auth):
         """
         if user_id:
             if isinstance(user_id, str):
-                uid = uuid.uuid4()
+                uid = str(uuid.uuid4())
                 self.user_id_by_session_id.update({uid: user_id})
                 return uid
         return None
