@@ -43,7 +43,9 @@ class Auth:
         cookie_nm = "_my_session_id"
         if os.getenv("SESSION_NAME"):
             cookie_nm = os.getenv("SESSION_NAME")
-        if request and request.cookie:
-            return request.cookie.get(cookie_nm)
-
+        if request:
+            try:
+                return request.cookie.get(cookie_nm)
+            except:
+                pass
         return None
