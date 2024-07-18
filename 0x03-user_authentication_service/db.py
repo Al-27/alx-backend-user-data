@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, update
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from sqlalchemy.orm.exc import  NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 
 from user import Base, User
@@ -31,7 +31,7 @@ class DB:
             DBSession = sessionmaker(bind=self._engine)
             self.__session = DBSession()
         return self.__session
-    
+
     def add_user(self, email: str, hashed_password: str) -> User:
         """Return and add user to db
         """
@@ -41,14 +41,18 @@ class DB:
 
         return user
 
-
-    def find_user_by(self,is_Update: bool=False, **kwargs: dict) -> User:
+    def find_user_by(self, is_Update: bool = False, **kwargs: dict) -> User:
         """no explanation needed
         """
-        columns =  ["email", "hashed_password", "id", "session_id", "reset_token"] 
+        columns = [
+            "email",
+            "hashed_password",
+            "id",
+            "session_id",
+            "reset_token"]
         if all(e not in columns for e in kwargs.keys()):
             raise InvalidRequestError
-        
+
         user = self._session.query(User).filter_by(**kwargs)
         if user.first() is None:
             raise NoResultFound
@@ -56,14 +60,13 @@ class DB:
             return user
 
         return user.first()
-        
 
     def update_user(self, user_id: int, **kwargs: dict) -> None:
         """func
         """
         try:
-            user = self.find_user_by(is_Update=True,id=user_id)
+            user = self.find_user_by(is_Update=True, id=user_id)
         except (InvalidRequestError, NoResultFound) as e:
             raise ValueError
-        
+
         user.update({**kwargs})

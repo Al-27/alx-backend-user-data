@@ -7,6 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
+
 class User(Base):
     """
     Users Table
@@ -25,8 +26,7 @@ class User(Base):
         self.email = kwargs.get("email")
         self.hashed_password = kwargs.get("hashed_password")
 
-
-    def update(self, **kwargs:dict) -> None:
+    def update(self, **kwargs: dict) -> None:
         """func
         """
         self.__dict__.update(**kwargs)
