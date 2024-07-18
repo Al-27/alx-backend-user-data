@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Module of Index views
+""" Module of user
 """
 from sqlalchemy import String, Integer, Column
 from sqlalchemy.ext.declarative import declarative_base

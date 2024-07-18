@@ -7,6 +7,8 @@ from user import User
 
 
 def _hash_password(password: str) -> bytes:
+    """hash
+    """
     byt = hashpw(bytes(password, 'utf-8'), gensalt() )
     return byt
 
@@ -15,10 +17,14 @@ class Auth:
     """
 
     def __init__(self):
+        """func
+        """
         self._db = DB()
 
 
     def register_user(self, email: str, password: str) -> User:
+        """reg
+        """
         try:
             user = self._db.find_user_by(email=email)
         except:
