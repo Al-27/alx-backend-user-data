@@ -29,7 +29,7 @@ def users():
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
 
-    return jsonify({"email": email, "message": "user created"})
+    return jsonify({"email": email, "message": "user created"}), 200
 
 
 @app.route('/sessions', methods=["POST"])
@@ -41,7 +41,7 @@ def login():
 
     if AUTH.valid_login(email, pwd):
         session['session_id'] = AUTH.create_session(email)
-        return jsonify({"email": email, "message": "logged in"})
+        return jsonify({"email": email, "message": "logged in"}), 200
 
     abort(401)
 
@@ -67,7 +67,7 @@ def profile():
     ss_id = request.cookies['session_id']
     user = AUTH.get_user_from_session_id(ss_id)
     if user:
-        return jsonify({"email": user.email})
+        return jsonify({"email": user.email}), 200
 
     abort(403)
 
@@ -82,7 +82,7 @@ def get_reset_password_token():
     except BaseException:
         abort(403)
 
-    return jsonify({"email": email, "reset_token": res_tok})
+    return jsonify({"email": email, "reset_token": res_tok}), 200
 
 
 @app.route('/reset_password', methods=["PUT"])
@@ -96,7 +96,7 @@ def update_password():
     except BaseException:
         abort(403)
 
-    return jsonify({"email": email, "reset_token": "Password updated"})
+    return jsonify({"email": email, "reset_token": "Password updated"}), 200
 
 
 if __name__ == "__main__":
