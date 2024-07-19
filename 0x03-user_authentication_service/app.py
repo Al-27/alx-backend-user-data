@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """APP
 """
-from flask import Flask, jsonify, request, session, abort, redirect, url_for
+from flask import Flask, jsonify, request, make_response, abort, redirect, url_for
 from auth import Auth
 import os
 
@@ -38,10 +38,10 @@ def login():
     """
     email = request.form['email']
     pwd = request.form['password']
-
+    resp = make_response(jsonify({"email": email, "message": "logged in"}),status=200)
     if AUTH.valid_login(email, pwd):
-        session['session_id'] = AUTH.create_session(email)
-        return jsonify({"email": email, "message": "logged in"}), 200
+        resp.set_cookie('session_id', AUTH.create_session(email) )
+        return resp
 
     abort(401)
 
@@ -53,10 +53,11 @@ def logout():
     if "session_id" in request.cookies:
         sess_id = request.cookies["session_id"]
         user = AUTH.get_user_from_session_id(sess_id)
+        resp = make_response(location=url_for("index"))
         if user:
-            session.pop("session_id")
+            resp.delete_cookie("session_id")
             AUTH.destroy_session(user.id)
-            return redirect(url_for("index"))
+            return resp
     abort(403)
 
 
