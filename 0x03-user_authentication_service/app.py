@@ -40,7 +40,7 @@ def login():
     pwd = request.form['password']
     resp = make_response(jsonify({"email": email, "message": "logged in"}))
     if AUTH.valid_login(email, pwd):
-        resp.set_cookie('session_id', AUTH.create_session(email) )
+        resp.set_cookie('session_id', AUTH.create_session(email))
         return resp, 200
 
     abort(401)
@@ -53,11 +53,11 @@ def logout():
     if "session_id" in request.cookies:
         sess_id = request.cookies["session_id"]
         user = AUTH.get_user_from_session_id(sess_id)
-        resp = make_response(location=url_for("index"))
+        resp = make_response("")
         if user:
             resp.delete_cookie("session_id")
             AUTH.destroy_session(user.id)
-            return resp
+            return redirect(url_for("index"))
     abort(403)
 
 
