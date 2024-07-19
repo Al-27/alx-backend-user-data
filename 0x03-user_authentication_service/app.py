@@ -65,10 +65,11 @@ def logout():
 def profile():
     """func
     """
-    ss_id = request.cookies['session_id']
-    user = AUTH.get_user_from_session_id(ss_id)
-    if user:
-        return jsonify({"email": user.email}), 200
+    ss_id = request.cookies.get('session_id')
+    if ss_id:
+        user = AUTH.get_user_from_session_id(ss_id)
+        if user:
+            return jsonify({"email": user.email}), 200
 
     abort(403)
 
