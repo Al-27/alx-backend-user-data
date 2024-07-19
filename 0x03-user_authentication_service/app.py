@@ -38,10 +38,10 @@ def login():
     """
     email = request.form['email']
     pwd = request.form['password']
-    resp = make_response(jsonify({"email": email, "message": "logged in"}),status=200)
+    resp = make_response(jsonify({"email": email, "message": "logged in"}))
     if AUTH.valid_login(email, pwd):
         resp.set_cookie('session_id', AUTH.create_session(email) )
-        return resp
+        return resp, 200
 
     abort(401)
 
